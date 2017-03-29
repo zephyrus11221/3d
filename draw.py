@@ -16,8 +16,8 @@ def add_box( points, x, y, z, width, height, depth ):
 def add_sphere( points, cx, cy, cz, r, step ):
     sphere = generate_sphere([], cx, cy, cz, r, step)
     for i in range(len(sphere)):
-        points.append(sphere[i])
-        points.append(sphere[i])
+        points.append(sphere[i][:])
+        points.append(sphere[i][:])
     pass
 def generate_sphere( points, cx, cy, cz, r, step ):
     n = int(1/step)
@@ -27,18 +27,41 @@ def generate_sphere( points, cx, cy, cz, r, step ):
     point = [0, 0, 0, 1]
     for i in range(n):
         t = i*step
-        x1 = r*math.cos(2*math.pi*t)+cx
-        y1 = r*math.sin(2*math.pi*t)*math.cos(math.pi*t)+cy
-        z1 = r*math.sin(2*math.pi*t)*math.sin(math.pi*t)+cz
-        point[0] = x1
-        point[1] = y1
-        point[2] = z1
+        for i0 in range(n):
+            t1 = i0*step
+            x1 = r*math.cos(2*math.pi*t)+cx
+            y1 = r*math.sin(2*math.pi*t)*math.cos(math.pi*t1)+cy
+            z1 = r*math.sin(2*math.pi*t)*math.sin(math.pi*t1)+cz
+            point[0] = x1
+            point[1] = y1
+            point[2] = z1
+            points.append(point[:])
     return points
 
 def add_torus( points, cx, cy, cz, r0, r1, step ):
-    
+    torus = generate_torus([], cx, cy, cz, r0, r1, step)
+    for i in range(len(torus)):
+        points.append(torus[i][:])
+        points.append(torus[i][:])    
     pass
 def generate_torus( points, cx, cy, cz, r0, r1, step ):
+    n = int(1/step)
+    x0 = cx
+    y0 = cy
+    z0 = cz
+    point = [0, 0, 0, 1]
+    for i in range(n):
+        t1 = i*step
+        for i0 in range(n):
+            t = i0*step
+            x1 = math.cos(2*math.pi*t1)*(r0*math.cos(2*math.pi*t)+r1)+cx
+            y1 = r0*math.sin(2*math.pi*t)+cy
+            z1 = -1*math.sin(2*math.pi*t1)*(r0*math.cos(2*math.pi*t)+r1)+cz
+            point[0] = x1
+            point[1] = y1
+            point[2] = z1
+            points.append(point[:])
+    return points
     
     pass
 
